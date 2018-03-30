@@ -1,0 +1,4 @@
+Flask==0.12.2
+Flask_API==1.0
+Flask-Cors==3.0.3
+PyMySQL==0.8.0

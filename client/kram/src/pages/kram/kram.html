@@ -1,0 +1,50 @@
+<ion-header>
+  <ion-navbar *ngIf="showSearchbar" hideBackButton color="primary">
+    <ion-searchbar (input)="getItems($event)"></ion-searchbar>
+    <ion-buttons end>
+      <button color="text" (click)="toggleSearchbar()" ion-button>
+        <ion-label>Cancel</ion-label>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+  <ng-container *ngIf="!showSearchbar">
+    <ion-navbar hideBackButton color="primary">
+      <ion-buttons left>
+        <button color="text" (click)="openMenu()" ion-button icon-only>
+          <ion-icon name="menu"></ion-icon>
+        </button>
+      </ion-buttons>
+      <ion-title color="text">
+        KRAM
+      </ion-title>
+      <ion-buttons end>
+        <button color="text" (click)="toggleSearchbar()" ion-button icon-only>
+          <ion-icon name="search"></ion-icon>
+        </button>
+        <button color="text" ion-button icon-only>
+          <ion-icon name="more"></ion-icon>
+        </button>
+      </ion-buttons>
+    </ion-navbar>
+  </ng-container>
+</ion-header>
+<ion-content id="kram">
+  <ion-item-group id="kram-group1">
+    <ion-item-divider color="light-primary">A</ion-item-divider>
+    <ng-container *ngFor="let item of data.data">
+      <ion-item id="kram-list-item1" (click)="goToItem({itemId: item.itemId, editable: false})">
+        <ion-thumbnail item-left>
+          <img />
+        </ion-thumbnail>
+        <h2>
+          {{item.name}}
+        </h2>
+      </ion-item>
+    </ng-container>
+  </ion-item-group>
+
+  <ion-fab right bottom>
+      <button ion-fab color="accent" (click)="goToItem({editable: true})"><ion-icon name="add"></ion-icon></button>
+  </ion-fab>
+
+</ion-content>
