@@ -8,9 +8,6 @@ export class RestProvider {
   options: any;
   constructor(public http: HttpClient) {
     this.headers = new Headers();
-    // this.headers.append('Access-Control-Allow-Origin' , '*');
-    // this.headers.append('Access-Control-Allow-Methods', 'POST, GET, OPTIONS, PUT');
-    // this.headers.append('Accept','application/json');
     this.headers.append('content-type','application/json');
 
   }
@@ -37,7 +34,6 @@ export class RestProvider {
   }
 
   postSignup(data) {
-    console.log('POST Signup');
     return new Promise((resolve, reject) => {
       this.http.post(this.apiUrl+'/signup', data, this.headers)
       .subscribe(res => {
@@ -51,6 +47,17 @@ export class RestProvider {
   postLogin(data) {
     return new Promise((resolve, reject) => {
       this.http.post(this.apiUrl+'/login', data, this.headers)
+      .subscribe(res => {
+        resolve(res);
+      }, (err) => {
+        reject(err);
+      });
+    });
+  }
+
+  postDelete(data) {
+    return new Promise((resolve, reject) => {
+      this.http.post(this.apiUrl+'/delete', data, this.headers)
       .subscribe(res => {
         resolve(res);
       }, (err) => {

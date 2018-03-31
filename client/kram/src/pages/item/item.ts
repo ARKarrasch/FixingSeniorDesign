@@ -34,13 +34,14 @@ export class ItemPage {
         {
           text: 'No',
           handler: () => {
-            console.log('No');
+
           }
         },
         {
           text: 'Yes',
           handler: () => {
-            console.log('Yes');
+            console.log({"itemId": this.itemId});
+            this.restProvider.postDelete({itemId: this.itemId});
           }
         }
       ]
