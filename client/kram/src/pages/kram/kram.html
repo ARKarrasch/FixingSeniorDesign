@@ -30,9 +30,9 @@
 </ion-header>
 <ion-content id="kram">
   <ion-item-group id="kram-group1">
-    <ion-item-divider color="light-primary">A</ion-item-divider>
+    <!-- <ion-item-divider color="light-primary">A</ion-item-divider> -->
     <ng-container *ngFor="let item of data.data">
-      <ion-item id="kram-list-item1" (click)="goToItem({itemId: item.itemId, editable: false})">
+      <ion-item id="kram-list-item1" (click)="goToItem({itemId: item.itemId, editable: false, newItem: false})">
         <ion-thumbnail item-left>
           <img />
         </ion-thumbnail>
@@ -44,7 +44,7 @@
   </ion-item-group>
 
   <ion-fab right bottom>
-      <button ion-fab color="accent" (click)="goToItem({editable: true})"><ion-icon name="add"></ion-icon></button>
+      <button ion-fab color="accent" (click)="goToItem({itemId: null, editable: true, newItem: true})"><ion-icon name="add"></ion-icon></button>
   </ion-fab>
 
 </ion-content>

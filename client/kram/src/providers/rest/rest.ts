@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 @Injectable()
@@ -58,6 +58,28 @@ export class RestProvider {
   postDelete(data) {
     return new Promise((resolve, reject) => {
       this.http.post(this.apiUrl+'/delete', data, this.headers)
+      .subscribe(res => {
+        resolve(res);
+      }, (err) => {
+        reject(err);
+      });
+    });
+  }
+
+  postUpdate(data) {
+    return new Promise((resolve, reject) => {
+      this.http.post(this.apiUrl+'/update', data, this.headers)
+      .subscribe(res => {
+        resolve(res);
+      }, (err) => {
+        reject(err);
+      });
+    });
+  }
+
+  postCreate(data) {
+    return new Promise((resolve, reject) => {
+      this.http.post(this.apiUrl+'/create', data, this.headers)
       .subscribe(res => {
         resolve(res);
       }, (err) => {

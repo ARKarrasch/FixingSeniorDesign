@@ -16,38 +16,41 @@
       <ion-label class="label">
         Name
       </ion-label>
-      <ion-input [readonly]="!getEditable()" color="secondary-text" type="text" placeholder="" value="{{item.name}}"></ion-input>
+      <ion-input [(ngModel)]="item.name" [ngModelOptions]="{standalone:true}" [readonly]="!getEditable()" color="secondary-text" type="text" placeholder=""></ion-input>
     </ion-item>
     <ion-item id="item-input-quantity">
       <ion-label class="label">
         Quantity
       </ion-label>
-      <ion-input [readonly]="!getEditable()" color="secondary-text" type="number" placeholder="" value="{{item.quantity}}"></ion-input>
+      <ion-input [(ngModel)]="item.quantity" [ngModelOptions]="{standalone:true}" [readonly]="!getEditable()" color="secondary-text" type="number" placeholder=""></ion-input>
     </ion-item>
     <ion-item id="item-input-price">
       <ion-label class="label">
         Price
       </ion-label>
-      <ion-input [readonly]="!getEditable()" color="secondary-text" type="number" placeholder="" value="{{item.price}}"></ion-input>
+      <ion-input [(ngModel)]="item.price" [ngModelOptions]="{standalone:true}" [readonly]="!getEditable()" color="secondary-text" type="number" placeholder=""></ion-input>
     </ion-item>
     <ion-item id="item-input-location">
       <ion-label class="label">
         Location
       </ion-label>
-      <ion-input [readonly]="!getEditable()" color="secondary-text" type="text" placeholder="" value="{{item.location}}"></ion-input>
+      <ion-input [(ngModel)]="item.location" [ngModelOptions]="{standalone:true}" [readonly]="!getEditable()" color="secondary-text" type="text" placeholder=""></ion-input>
     </ion-item>
     <ion-item id="item-textarea-notes">
       <ion-label class="label">
         Notes
       </ion-label>
-      <ion-textarea autoresize class="textarea" [readonly]="!getEditable()" color="secondary-text" placeholder="" value="{{item.notes}}"></ion-textarea>
+      <ion-textarea [(ngModel)]="item.notes" [ngModelOptions]="{standalone:true}" autoresize class="textarea" [readonly]="!getEditable()" color="secondary-text" placeholder=""></ion-textarea>
     </ion-item>
     <br>
-    <button *ngIf="editable" id="item-button-save" ion-button color="accent" block on-click="setEditable(false)">
+    <button *ngIf="editable && !newItem" id="item-button-save" ion-button color="accent" block on-click="save()">
       Save
     </button>
+    <button *ngIf="editable && newItem" id="item-button-create" ion-button color="accent" block on-click="create()">
+      Create
+    </button>
     <br>
-    <button *ngIf="editable" id="item-button-delete" ion-button color="danger" block on-click="confirmDelete()">
+    <button *ngIf="editable && !newItem" id="item-button-delete" ion-button color="danger" block on-click="confirmDelete()">
       Delete
     </button>
   </form>
