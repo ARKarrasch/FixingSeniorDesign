@@ -12,6 +12,7 @@ import { PopoverPage } from '../pages/kram/kram';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { RestProvider } from '../providers/rest/rest';
+import { UserDataProvider } from '../providers/user-data/user-data';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { RestProvider } from '../providers/rest/rest';
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    RestProvider
+    RestProvider,
+    UserDataProvider
   ]
 })
 export class AppModule {}

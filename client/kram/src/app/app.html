@@ -8,13 +8,13 @@
         <img class="app-logo" src="../assets/imgs/KRAM_Logo.png" />
         <ion-list no-lines>
             <ion-list-header>
-                Hello, Matthew
+                Hello {{userData.fullName}}
                 <br/><br/><br/>
-                matt@example.com
+                {{userData.email}}
                 <br/><br/><br/>
-                Items Owned: 25
-                <br/><br/><br/>
-                Total Value: $500
+                Items Owned: {{userData.itemCount}}
+                <!-- <br/><br/><br/>
+                Total Value: $500 -->
             </ion-list-header>
         </ion-list>
         <button ion-button menuClose class="app-logoutButton" color="danger" full on-click="goToLogin()">Logout</button>

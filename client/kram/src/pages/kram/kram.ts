@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { App, MenuController, NavController, PopoverController, ViewController, AlertController, NavParams } from 'ionic-angular';
 import { RestProvider } from '../../providers/rest/rest';
+import { UserDataProvider } from '../../providers/user-data/user-data'
 import { ItemPage } from '../item/item';
 
 @Component({
@@ -78,9 +79,9 @@ export class KramPage {
   sort = 'name';
   data: any;
   constructor(app: App, public navCtrl: NavController, public popoverCtrl: PopoverController, 
-    public menu: MenuController, public restProvider: RestProvider) {
+    public menu: MenuController, public restProvider: RestProvider, public userDataProvider: UserDataProvider) {
     this.data = {'data':[]};
-    restProvider.postItems({userId: this.userId, sort:this.sort}).then(res => this.data = res);
+    restProvider.postItems({userId: this.userId, sort:this.sort}).then(res => this.data = res).then(() => this.userDataProvider.itemCount = this.data['data'].length);
     menu.enable(true);
   }
 
