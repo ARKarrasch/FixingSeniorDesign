@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
-import { App, MenuController, NavController, PopoverController, ViewController, AlertController, NavParams } from 'ionic-angular';
+import { App, MenuController, NavController, PopoverController, ViewController, AlertController, NavParams, Events } from 'ionic-angular';
 import { RestProvider } from '../../providers/rest/rest';
 import { ItemPage } from '../item/item';
 
 @Component({
   template: `
     <ion-list>
-      <button ion-item (click)="close()">Refresh</button>
+      <button ion-item (click)="refresh()">Refresh</button>
       <button ion-item (click)="showRadio()">Sort by...</button>
     </ion-list>
   `
@@ -14,7 +14,8 @@ import { ItemPage } from '../item/item';
 export class PopoverPage {
   sort: string;
 
-  constructor(public viewCtrl: ViewController, public alertCtrl: AlertController, public navParms: NavParams) {}
+  constructor(public viewCtrl: ViewController, public alertCtrl: AlertController, public navParms: NavParams, 
+    public events: Events) {}
 
   ngOnInit() {
     if (this.navParms.data) {
@@ -22,6 +23,10 @@ export class PopoverPage {
     }
   }
 
+  refresh() {
+    this.events.publish('list:refresh');
+    this.close();
+  }
   close() {
     this.viewCtrl.dismiss(this.sort);
   }
@@ -78,14 +83,20 @@ export class KramPage {
   sort = 'name';
   data: any;
   constructor(app: App, public navCtrl: NavController, public popoverCtrl: PopoverController, 
-    public menu: MenuController, public restProvider: RestProvider) {
+    public menu: MenuController, public restProvider: RestProvider, public events: Events) {
     this.data = {'data':[]};
-    restProvider.postItems({userId: this.userId, sort:this.sort}).then(res => this.data = res);
+    this.refresh();
     menu.enable(true);
+    events.subscribe('list:refresh', () => {
+      this.refresh();
+    });
+  }
+  onPageWillEnter() {
+    this.refresh();
   }
 
   goToItem(params) {
-    if (!params) params = {itemId:null, editable: true};
+    if (!params) params = {itemId:null, editable: true, newItem: true};
     this.navCtrl.push(ItemPage, params);
   }
   openMenu() {
@@ -108,5 +119,8 @@ export class KramPage {
     popover.onDidDismiss(data => {
       this.sort = data;
     })
+  }
+  refresh() {
+    this.restProvider.postItems({userId: this.userId, sort:this.sort}).then(res => this.data = res);
   }
 }

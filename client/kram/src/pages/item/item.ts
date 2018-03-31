@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, AlertController } from 'ionic-angular';
+import { NavController, NavParams, AlertController, Events } from 'ionic-angular';
 import { RestProvider } from '../../providers/rest/rest';
 import { KramPage } from '../kram/kram';
 
@@ -9,12 +9,25 @@ import { KramPage } from '../kram/kram';
 })
 export class ItemPage {
   private editable: boolean;
+  private newItem: boolean;
   private itemId: number;
-  item = {};
-  constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController, public restProvider: RestProvider) {
+  item: any = {
+    "name": null, 
+    "quantity": null, 
+    "price": null, 
+    "location": null, 
+    "notes": null
+  }
+  constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController, 
+    public restProvider: RestProvider, public events: Events) {
     this.editable = navParams.get("editable");
     this.itemId = navParams.get("itemId");
-    restProvider.getItem(this.itemId).then(res => this.item = res);
+    this.newItem = navParams.get("newItem");
+    // console.log({itemId: this.itemId, editable: this.editable, newItem: this.newItem});
+    if (this.newItem === false) {
+      restProvider.getItem(this.itemId).then(res => this.item = res);
+    }
+    //name, quantity, price, location, notes
   }
   goToKram(params){
     if (!params) params = {};
@@ -25,6 +38,35 @@ export class ItemPage {
   }
   setEditable(val: boolean){
     this.editable = val;
+  }
+  create() {
+    this.restProvider.postCreate({
+      "userId": 1,
+      "name": this.item.name,
+      "quantity": this.item.quantity,
+      "price": this.item.price,
+      "location": this.item.location,
+      "notes": this.item.notes
+    }).then( () => {
+      this.events.publish('list:refresh');
+      this.navCtrl.pop();
+    });
+    this.newItem = false;
+    this.setEditable(false);
+
+  }
+  save() {
+    this.restProvider.postUpdate({
+      "itemId": this.itemId,
+      "name": this.item.name,
+      "quantity": this.item.quantity,
+      "price": this.item.price,
+      "location": this.item.location,
+      "notes": this.item.notes
+    }).then( () => {
+      this.events.publish('list:refresh');
+    });
+    this.setEditable(false);
   }
   confirmDelete() {
     let confirm = this.alertCtrl.create({
@@ -41,7 +83,10 @@ export class ItemPage {
           text: 'Yes',
           handler: () => {
             console.log({"itemId": this.itemId});
-            this.restProvider.postDelete({itemId: this.itemId});
+            this.restProvider.postDelete({itemId: this.itemId}).then( () => {
+              this.events.publish('list:refresh');
+              this.navCtrl.pop();
+            });
           }
         }
       ]
