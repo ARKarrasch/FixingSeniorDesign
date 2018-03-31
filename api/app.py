@@ -13,7 +13,7 @@ CORS(app, send_wildcard=True)
 def get_login():
     email = request.get_json(force = True)["email"]
     password = request.get_json(force = True)["password"]
-    results = sql_query('SELECT userId, email, fullName FROM Kram.User WHERE email=\"' + email + '\" AND password=\"' + password + '\"', False)
+    results = sql_query('SELECT userId, email, fullName FROM Kram.User WHERE email=\"' + str(email) + '\" AND password=\"' + str(password) + '\"', False)
     if (type(results) == type(None)):
         return jsonify( isUser=False, userId=None, email=None, fullName=None)
     else:
@@ -67,18 +67,20 @@ def get_create():
     price = request.get_json(force = True)["price"]
     location = request.get_json(force = True)["location"]
     notes = request.get_json(force = True)["notes"]
-    sql_execute('INSERT INTO `Item` (  `userId`, `name`, `quantity`, `price`, `location`, `notes`) VALUE (\"' + str(user_id) + '\", \"' + name + '\", \"' + quantity + '\", \"' + price + '\", \"' + location + '\", \"' + notes + '\");')
+    sql_execute('INSERT INTO `Item` (  `userId`, `name`, `quantity`, `price`, `location`, `notes`) VALUE (\"' + str(user_id) + '\", \"' + str(name) + '\", \"' + str(quantity) + '\", \"' + str(price) + '\", \"' + str(location) + '\", \"' + str(notes) + '\");')
     return jsonify({})
 
 @app.route('/update', methods=['POST'])
 def get_update():
+    print("post Update")
     item_id = request.get_json(force = True)["itemId"]
     name = request.get_json(force = True)["name"]
     quantity = request.get_json(force = True)["quantity"]
     price = request.get_json(force = True)["price"]
     location = request.get_json(force = True)["location"]
     notes = request.get_json(force = True)["notes"]
-    sql_execute('UPDATE Kram.Item SET `name`=\"' + name + '\", `quantity`=\"' + quantity + '\", `price`=\"' + price + '\", `location`=\"' + location + '\", `notes`=\"' + notes + '\" WHERE itemId=' + str(item_id))
+    print('UPDATE Kram.Item SET `name`=\"' + str(name) + '\", `quantity`=\"' + str(quantity) + '\", `price`=\"' + str(price) + '\", `location`=\"' + str(location) + '\", `notes`=\"' + str(notes) + '\" WHERE itemId=' + str(item_id))
+    sql_execute('UPDATE Kram.Item SET `name`=\"' + str(name) + '\", `quantity`=\"' + str(quantity) + '\", `price`=\"' + str(price) + '\", `location`=\"' + str(location) + '\", `notes`=\"' + str(notes) + '\" WHERE itemId=' + str(item_id))
     return jsonify({})
 
 @app.route('/delete', methods=['POST'])
@@ -95,7 +97,7 @@ def get_search():
     search = request.get_json(force = True)["search"]
     print(sort)
     if (sort == "price"):
-        results = sql_query('SELECT Item.itemId, Item.name, Item.price FROM Kram.Item WHERE userId= ' + str(user_id) + ' AND (Item.name LIKE \"%' + search + '%\" OR Item.location LIKE \"%' + search + '%\" OR Item.notes LIKE \"%' + search + '%\") ORDER BY Item.price ASC;')
+        results = sql_query('SELECT Item.itemId, Item.name, Item.price FROM Kram.Item WHERE userId= ' + str(user_id) + ' AND (Item.name LIKE \"%' + str(search) + '%\" OR Item.location LIKE \"%' + str(search) + '%\" OR Item.notes LIKE \"%' + str(search) + '%\") ORDER BY Item.price ASC;')
         resultsList = []
         for i in results:
             resDict = {
@@ -105,7 +107,7 @@ def get_search():
             resultsList.append(resDict)
         return jsonify({'data': resultsList})
     elif (sort == "location"):
-        results = sql_query('SELECT Item.itemId, Item.name, Item.location FROM Kram.Item WHERE userId= ' + str(user_id) + ' AND (Item.name LIKE \"%' + search + '%\" OR Item.location LIKE \"%' + search + '%\" OR Item.notes LIKE \"%' + search + '%\") ORDER BY Item.location ASC;')
+        results = sql_query('SELECT Item.itemId, Item.name, Item.location FROM Kram.Item WHERE userId= ' + str(user_id) + ' AND (Item.name LIKE \"%' + str(search) + '%\" OR Item.location LIKE \"%' + str(search) + '%\" OR Item.notes LIKE \"%' + str(search) + '%\") ORDER BY Item.location ASC;')
         resultsList = []
         for i in results:
             resDict = {
@@ -115,7 +117,7 @@ def get_search():
             resultsList.append(resDict)
         return jsonify({'data': resultsList})
     else:
-        results = sql_query('SELECT Item.itemId, Item.name, Item.price FROM Kram.Item WHERE userId= ' + str(user_id) + ' AND (Item.name LIKE \"%' + search + '%\" OR Item.location LIKE \"%' + search + '%\" OR Item.notes LIKE \"%' + search + '%\") ORDER BY Item.name ASC;')
+        results = sql_query('SELECT Item.itemId, Item.name, Item.price FROM Kram.Item WHERE userId= ' + str(user_id) + ' AND (Item.name LIKE \"%' + str(search) + '%\" OR Item.location LIKE \"%' + str(search) + '%\" OR Item.notes LIKE \"%' + str(search) + '%\") ORDER BY Item.name ASC;')
         resultsList = []
         for i in results:
             resDict = {
