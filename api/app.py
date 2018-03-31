@@ -11,16 +11,16 @@ CORS(app, send_wildcard=True)
 
 @app.route('/login', methods=['POST'])
 def get_login():
-    username = request.get_json(force = True)["username"]
+    email = request.get_json(force = True)["email"]
     password = request.get_json(force = True)["password"]
-    results = sql_query('SELECT userId, email, fullName FROM Kram.User WHERE userName=\"' + username + '\" AND password=\"' + password + '\"', False)
+    results = sql_query('SELECT userId, email, fullName FROM Kram.User WHERE email=\"' + email + '\" AND password=\"' + password + '\"', False)
     if (type(results) == type(None)):
         return jsonify( isUser=False, userId=None, email=None, fullName=None)
     else:
-        return jsonify( isUser=True, userId=results[0], userId=results[0], userId=results[0])
+        return jsonify( isUser=True, userId=results[0], email=results[1], fullName=results[2])
 
 @app.route('/list', methods=['POST'])
-def get_search():
+def get_list():
     user_id = request.get_json(force = True)["userId"]
     sort = request.get_json(force = True)["sort"]
     print(sort)
