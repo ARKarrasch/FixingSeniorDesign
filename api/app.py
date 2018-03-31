@@ -88,41 +88,41 @@ def get_delete():
     return jsonify({})
 
 
-# @app.route('/search', methods=['POST'])
-# def get_search():
-#     user_id = request.get_json(force = True)["userId"]
-#     sort = request.get_json(force = True)["sort"]
-#     search = request.get_json(force = True)["search"]
-#     print(sort)
-#     if (sort == "price"):
-#         results = sql_query('SELECT Item.itemId, Item.name, Item.price FROM Kram.Item WHERE userId= ' +  + ' AND (Item.name LIKE "%%" OR Item.location LIKE "%%" OR Item.notes LIKE "%%") ORDER BY Item.price ASC;')
-#         resultsList = []
-#         for i in results:
-#             resDict = {
-#             "itemId": i[0],
-#             "name": i[1],
-#             "price": i[2]}
-#             resultsList.append(resDict)
-#         return jsonify({'data': resultsList})
-#     elif (sort == "location"):
-#         results = sql_query('SELECT Item.itemId, Item.name, Item.location FROM Kram.Item WHERE userId=' + str(user_id) + ' ORDER BY Item.location ASC;')
-#         resultsList = []
-#         for i in results:
-#             resDict = {
-#             "itemId": i[0],
-#             "name": i[1],
-#             "location": i[2]}
-#             resultsList.append(resDict)
-#         return jsonify({'data': resultsList})
-#     else:
-#         results = sql_query('SELECT Item.itemId, Item.name FROM Kram.Item WHERE userId=' + str(user_id) + ' ORDER BY Item.name ASC;')
-#         resultsList = []
-#         for i in results:
-#             resDict = {
-#             "itemId": i[0],
-#             "name": i[1]}
-#             resultsList.append(resDict)
-#         return jsonify({'data': resultsList})
+@app.route('/search', methods=['POST'])
+def get_search():
+    user_id = request.get_json(force = True)["userId"]
+    sort = request.get_json(force = True)["sort"]
+    search = request.get_json(force = True)["search"]
+    print(sort)
+    if (sort == "price"):
+        results = sql_query('SELECT Item.itemId, Item.name, Item.price FROM Kram.Item WHERE userId= ' + user_id + ' AND (Item.name LIKE \"%' + search + '%\" OR Item.location LIKE \"%' + search + '%\" OR Item.notes LIKE \"%' + search + '%\") ORDER BY Item.price ASC;')
+        resultsList = []
+        for i in results:
+            resDict = {
+            "itemId": i[0],
+            "name": i[1],
+            "price": i[2]}
+            resultsList.append(resDict)
+        return jsonify({'data': resultsList})
+    elif (sort == "location"):
+        results = sql_query('SELECT Item.itemId, Item.name, Item.location FROM Kram.Item WHERE userId= ' + user_id + ' AND (Item.name LIKE \"%' + search + '%\" OR Item.location LIKE \"%' + search + '%\" OR Item.notes LIKE \"%' + search + '%\") ORDER BY Item.location ASC;')
+        resultsList = []
+        for i in results:
+            resDict = {
+            "itemId": i[0],
+            "name": i[1],
+            "location": i[2]}
+            resultsList.append(resDict)
+        return jsonify({'data': resultsList})
+    else:
+        results = sql_query('SELECT Item.itemId, Item.name, Item.price FROM Kram.Item WHERE userId= ' + user_id + ' AND (Item.name LIKE \"%' + search + '%\" OR Item.location LIKE \"%' + search + '%\" OR Item.notes LIKE \"%' + search + '%\") ORDER BY Item.name ASC;')
+        resultsList = []
+        for i in results:
+            resDict = {
+            "itemId": i[0],
+            "name": i[1]}
+            resultsList.append(resDict)
+        return jsonify({'data': resultsList})
 
 
 @app.route('/signup', methods=['POST'])
