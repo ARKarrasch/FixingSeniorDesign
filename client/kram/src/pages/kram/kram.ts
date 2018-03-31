@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { App, MenuController, NavController, PopoverController, ViewController, AlertController, NavParams, Events } from 'ionic-angular';
 import { RestProvider } from '../../providers/rest/rest';
-import { UserDataProvider } from '../../providers/user-data/user-data'
+import { UserDataProvider } from '../../providers/user-data/user-data';
 import { ItemPage } from '../item/item';
 
 @Component({
@@ -80,8 +80,8 @@ export class PopoverPage {
 })
 export class KramPage {
   showSearchbar = false;
-  userId = 1;
   sort = 'name';
+  searchTerm = "";
   data: any;
   constructor(app: App, public navCtrl: NavController, public popoverCtrl: PopoverController, 
     public menu: MenuController, public restProvider: RestProvider, public events: Events, public userDataProvider: UserDataProvider) {
@@ -91,9 +91,6 @@ export class KramPage {
     events.subscribe('list:refresh', () => {
       this.refresh();
     });
-  }
-  onPageWillEnter() {
-    this.refresh();
   }
 
   goToItem(params) {
@@ -119,9 +116,14 @@ export class KramPage {
     });
     popover.onDidDismiss(data => {
       this.sort = data;
+      this.refresh();
     })
   }
+  search() {
+    this.restProvider.postSearch({userId: this.userDataProvider.userId, sort:this.sort, search:this.searchTerm}).then(res => this.data = res);
+    this.toggleSearchbar();
+  }
   refresh() {
-    this.restProvider.postItems({userId: this.userId, sort:this.sort}).then(res => this.data = res).then(() => this.userDataProvider.itemCount = this.data['data'].length);
+    this.restProvider.postItems({userId: this.userDataProvider.userId, sort:this.sort}).then(res => this.data = res).then(() => this.userDataProvider.itemCount = this.data['data'].length);
   }
 }

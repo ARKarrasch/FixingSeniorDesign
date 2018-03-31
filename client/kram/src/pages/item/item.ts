@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, AlertController, Events } from 'ionic-angular';
 import { RestProvider } from '../../providers/rest/rest';
+import { UserDataProvider } from '../../providers/user-data/user-data'
 import { KramPage } from '../kram/kram';
 
 @Component({
@@ -19,11 +20,10 @@ export class ItemPage {
     "notes": null
   }
   constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController, 
-    public restProvider: RestProvider, public events: Events) {
+    public restProvider: RestProvider, public events: Events, public userDataProvider: UserDataProvider) {
     this.editable = navParams.get("editable");
     this.itemId = navParams.get("itemId");
     this.newItem = navParams.get("newItem");
-    // console.log({itemId: this.itemId, editable: this.editable, newItem: this.newItem});
     if (this.newItem === false) {
       restProvider.getItem(this.itemId).then(res => this.item = res);
     }
@@ -41,7 +41,7 @@ export class ItemPage {
   }
   create() {
     this.restProvider.postCreate({
-      "userId": 1,
+      "userId": this.userDataProvider.userId,
       "name": this.item.name,
       "quantity": this.item.quantity,
       "price": this.item.price,
@@ -82,7 +82,6 @@ export class ItemPage {
         {
           text: 'Yes',
           handler: () => {
-            console.log({"itemId": this.itemId});
             this.restProvider.postDelete({itemId: this.itemId}).then( () => {
               this.events.publish('list:refresh');
               this.navCtrl.pop();

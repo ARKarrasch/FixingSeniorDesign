@@ -13,11 +13,11 @@ export class RestProvider {
   }
 
   getItem(itemId) {
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
       this.http.get(this.apiUrl+'/item/'+itemId).subscribe(data => {
         resolve(data);
       }, err => {
-        console.log(err);
+        reject(err);
       });
     });
   }
@@ -80,6 +80,17 @@ export class RestProvider {
   postCreate(data) {
     return new Promise((resolve, reject) => {
       this.http.post(this.apiUrl+'/create', data, this.headers)
+      .subscribe(res => {
+        resolve(res);
+      }, (err) => {
+        reject(err);
+      });
+    });
+  }
+
+  postSearch(data) {
+    return new Promise((resolve, reject) => {
+      this.http.post(this.apiUrl+'/search', data, this.headers)
       .subscribe(res => {
         resolve(res);
       }, (err) => {

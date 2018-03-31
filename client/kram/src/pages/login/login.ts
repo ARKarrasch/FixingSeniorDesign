@@ -30,14 +30,14 @@ export class LoginPage {
   }
 
   login() {
-    if (this.email !== null && this.password !== null) {
+    if (this.email && this.password) {
       this.restProvider.postLogin({ email: this.email, password: this.password }).then(res => this.userData = res)
         .then(() => {
           this.userDataProvider.userId = this.userData.userId;
           this.userDataProvider.email = this.userData.email;
           this.userDataProvider.fullName = this.userData.fullName;
+          this.goToKram(null);
         });
-      this.goToKram(null);
     }
   }
 }
