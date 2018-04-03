@@ -105,6 +105,8 @@ export class KramPage {
       this.showSearchbar = true;
     } else {
       this.showSearchbar = false;
+      this.refresh();
+      this.searchTerm = "";
     }
   }
   presentPopover(myEvent) {
@@ -121,7 +123,6 @@ export class KramPage {
   }
   search() {
     this.restProvider.postSearch({userId: this.userDataProvider.userId, sort:this.sort, search:this.searchTerm}).then(res => this.data = res);
-    this.toggleSearchbar();
   }
   refresh() {
     this.restProvider.postItems({userId: this.userDataProvider.userId, sort:this.sort}).then(res => this.data = res).then(() => this.userDataProvider.itemCount = this.data['data'].length);

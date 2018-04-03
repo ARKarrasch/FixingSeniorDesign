@@ -23,8 +23,9 @@
         </ion-label>
         <ion-input [(ngModel)]="password" [ngModelOptions]="{standalone:true}" id="password" type="password" placeholder=""></ion-input>
       </ion-item>
+      <p *ngIf="blankLogin" ion-text color="primary-text" style="text-align:center">Please enter a username and password.</p>
+      <p *ngIf="incorrectLogin" ion-text color="danger" style="text-align:center">This username and password do not match an existing account. Please try again or create an account below.</p>
     </ion-list>
-    <div class="spacer" style="height:40px;" id="login-spacer"></div>
     <button id="login-button-login" ion-button color="accent" block on-click="login()">
       Log in
     </button>

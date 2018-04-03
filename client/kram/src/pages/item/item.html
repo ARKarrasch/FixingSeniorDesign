@@ -18,18 +18,21 @@
       </ion-label>
       <ion-input [(ngModel)]="item.name" [ngModelOptions]="{standalone:true}" [readonly]="!getEditable()" color="secondary-text" type="text" placeholder=""></ion-input>
     </ion-item>
+    <p *ngIf="nameMissing" ion-text color="danger">Name is required.</p>
     <ion-item id="item-input-quantity">
       <ion-label class="label">
         Quantity
       </ion-label>
       <ion-input [(ngModel)]="item.quantity" [ngModelOptions]="{standalone:true}" [readonly]="!getEditable()" color="secondary-text" type="number" placeholder=""></ion-input>
     </ion-item>
+    <p *ngIf="quantityMissing" ion-text color="danger">Quantity is required.</p>
     <ion-item id="item-input-price">
       <ion-label class="label">
         Price
       </ion-label>
       <ion-input [(ngModel)]="item.price" [ngModelOptions]="{standalone:true}" [readonly]="!getEditable()" color="secondary-text" type="number" placeholder=""></ion-input>
     </ion-item>
+    <p *ngIf="priceMissing" ion-text color="danger">Price is required.</p>
     <ion-item id="item-input-location">
       <ion-label class="label">
         Location
