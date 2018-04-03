@@ -2,12 +2,8 @@
   <ion-navbar *ngIf="showSearchbar" hideBackButton color="primary">
     <ion-searchbar [(ngModel)]="searchTerm" [ngModelOptions]="{standalone:true}"></ion-searchbar>
     <ion-buttons end>
-      <button *ngIf="!searchTerm" color="text" (click)="toggleSearchbar()" ion-button>
-        <ion-label>Cancel</ion-label>
-      </button>
-      <button *ngIf="searchTerm" color="text" (click)="search()" ion-button round outline small>
-        <ion-label>Search</ion-label>
-      </button>
+      <button *ngIf="searchTerm" color="text" (click)="search()" ion-button round outline small>Search</button>
+      <button color="text" (click)="toggleSearchbar()" ion-button round outline small>Cancel</button>
     </ion-buttons>
   </ion-navbar>
   <ng-container *ngIf="!showSearchbar">
@@ -47,7 +43,9 @@
   </ion-item-group>
 
   <ion-fab right bottom>
-      <button ion-fab color="accent" (click)="goToItem({itemId: null, editable: true, newItem: true})"><ion-icon name="add"></ion-icon></button>
+    <button ion-fab color="accent" (click)="goToItem({itemId: null, editable: true, newItem: true})">
+      <ion-icon name="add"></ion-icon>
+    </button>
   </ion-fab>
 
 </ion-content>

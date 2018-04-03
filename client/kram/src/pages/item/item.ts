@@ -12,14 +12,17 @@ export class ItemPage {
   private editable: boolean;
   private newItem: boolean;
   private itemId: number;
+  private nameMissing: boolean;
+  private quantityMissing: boolean;
+  private priceMissing: boolean;
   item: any = {
-    "name": null, 
-    "quantity": null, 
-    "price": null, 
-    "location": null, 
+    "name": null,
+    "quantity": null,
+    "price": null,
+    "location": null,
     "notes": null
   }
-  constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController, 
+  constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController,
     public restProvider: RestProvider, public events: Events, public userDataProvider: UserDataProvider) {
     this.editable = navParams.get("editable");
     this.itemId = navParams.get("itemId");
@@ -29,44 +32,47 @@ export class ItemPage {
     }
     //name, quantity, price, location, notes
   }
-  goToKram(params){
+  goToKram(params) {
     if (!params) params = {};
     this.navCtrl.push(KramPage);
   }
-  getEditable(){
+  getEditable() {
     return this.editable;
   }
-  setEditable(val: boolean){
+  setEditable(val: boolean) {
     this.editable = val;
   }
   create() {
-    this.restProvider.postCreate({
-      "userId": this.userDataProvider.userId,
-      "name": this.item.name,
-      "quantity": this.item.quantity,
-      "price": this.item.price,
-      "location": this.item.location,
-      "notes": this.item.notes
-    }).then( () => {
-      this.events.publish('list:refresh');
-      this.navCtrl.pop();
-    });
-    this.newItem = false;
-    this.setEditable(false);
-
+    if (this.checkRequired()) {
+      this.restProvider.postCreate({
+        "userId": this.userDataProvider.userId,
+        "name": this.item.name,
+        "quantity": this.item.quantity,
+        "price": this.item.price,
+        "location": this.item.location,
+        "notes": this.item.notes
+      }).then(() => {
+        this.events.publish('list:refresh');
+        this.navCtrl.pop();
+      });
+      this.newItem = false;
+      this.setEditable(false);
+    }
   }
   save() {
-    this.restProvider.postUpdate({
-      "itemId": this.itemId,
-      "name": this.item.name,
-      "quantity": this.item.quantity,
-      "price": this.item.price,
-      "location": this.item.location,
-      "notes": this.item.notes
-    }).then( () => {
-      this.events.publish('list:refresh');
-    });
-    this.setEditable(false);
+    if (this.checkRequired()) {
+      this.restProvider.postUpdate({
+        "itemId": this.itemId,
+        "name": this.item.name,
+        "quantity": this.item.quantity,
+        "price": this.item.price,
+        "location": this.item.location,
+        "notes": this.item.notes
+      }).then(() => {
+        this.events.publish('list:refresh');
+      });
+      this.setEditable(false);
+    }
   }
   confirmDelete() {
     let confirm = this.alertCtrl.create({
@@ -82,7 +88,7 @@ export class ItemPage {
         {
           text: 'Yes',
           handler: () => {
-            this.restProvider.postDelete({itemId: this.itemId}).then( () => {
+            this.restProvider.postDelete({ itemId: this.itemId }).then(() => {
               this.events.publish('list:refresh');
               this.navCtrl.pop();
             });
@@ -91,5 +97,26 @@ export class ItemPage {
       ]
     });
     confirm.present();
+  }
+  checkRequired() {
+    if (this.item.name === null || this.item.name === '') {
+      this.nameMissing = true;
+    } else {
+      this.nameMissing = false;
+    }
+
+    if (this.item.quantity === null || this.item.quantity === '') {
+      this.quantityMissing = true;
+    } else {
+      this.quantityMissing = false;
+    }
+
+    if (this.item.price === null || this.item.price === '') {
+      this.priceMissing = true;
+    } else {
+      this.priceMissing = false;
+    }
+
+    return !this.nameMissing && !this.quantityMissing && !this.priceMissing
   }
 }

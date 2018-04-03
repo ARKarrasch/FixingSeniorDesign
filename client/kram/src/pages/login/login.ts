@@ -13,6 +13,8 @@ export class LoginPage {
   email: string;
   password: string;
   userData: any;
+  blankLogin: boolean;
+  incorrectLogin: boolean;
 
   constructor(public navCtrl: NavController, public restProvider: RestProvider, public userDataProvider: UserDataProvider) {
   }
@@ -30,14 +32,22 @@ export class LoginPage {
   }
 
   login() {
+    this.blankLogin = false;
+    this.incorrectLogin = false;
     if (this.email && this.password) {
       this.restProvider.postLogin({ email: this.email, password: this.password }).then(res => this.userData = res)
         .then(() => {
-          this.userDataProvider.userId = this.userData.userId;
-          this.userDataProvider.email = this.userData.email;
-          this.userDataProvider.fullName = this.userData.fullName;
-          this.goToKram(null);
+          if (!this.userData.isUser) {
+            this.incorrectLogin = true;
+          } else {
+            this.userDataProvider.userId = this.userData.userId;
+            this.userDataProvider.email = this.userData.email;
+            this.userDataProvider.fullName = this.userData.fullName;
+            this.goToKram(null);
+          }
         });
+    } else {
+      this.blankLogin = true;
     }
   }
 }
